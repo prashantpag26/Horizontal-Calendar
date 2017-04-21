@@ -49,7 +49,7 @@ public class HorizontalCalendar {
                 int position = calendarView.getPositionOfCenterItem();
 
                 if (calendarListener != null) {
-                    calendarListener.onDateSelected(mListDays.get(position), position);
+//                    calendarListener.onDateSelected(mListDays.get(position), position);
                 }
 
             }
@@ -74,7 +74,10 @@ public class HorizontalCalendar {
             }
 
         }
+
+
     };
+
 
     //RootView
     private final View rootView;
@@ -86,7 +89,7 @@ public class HorizontalCalendar {
     private final String formatDayName;
     private final String formatDayNumber;
     private final String formatMonth;
-    private int textColorNormal, textColorSelected;
+    private int textColorNormal, textColorSelected, textColorDay;
     private int selectedDateBackground;
     private int selectorColor;
     private float textSizeMonthName, textSizeDayNumber, textSizeDayName;
@@ -103,6 +106,7 @@ public class HorizontalCalendar {
         this.rootView = builder.rootView;
         this.calendarId = builder.viewId;
         this.textColorNormal = builder.textColorNormal;
+        this.textColorDay = builder.textColorDay;
         this.textColorSelected = builder.textColorSelected;
         this.selectedDateBackground = builder.selectedDateBackground;
         this.selectorColor = builder.selectorColor;
@@ -149,11 +153,22 @@ public class HorizontalCalendar {
         this.calendarListener = calendarListener;
     }
 
+    public void setOnLeftScroll(){
+        calendarView.scrollToPosition(calendarView.getPositionOfCenterItem()-10);
+        mCalendarAdapter.notifyDataSetChanged();
+    }
+
+    public void setOnRightScroll(){
+        calendarView.scrollToPosition(calendarView.getPositionOfCenterItem()+10);
+        mCalendarAdapter.notifyDataSetChanged();
+//        return calendarView.getPositionOfCenterItem();
+    }
+
     /**
      * Select today date and center the Horizontal Calendar to this date
      *
      * @param immediate pass true to make the calendar scroll as fast as possible to reach the date of today
-     * ,or false to play default scroll animation speed.
+     *                  ,or false to play default scroll animation speed.
      */
     public void goToday(boolean immediate) {
         selectDate(new Date(), immediate);
@@ -163,9 +178,9 @@ public class HorizontalCalendar {
     /**
      * Select the date and center the Horizontal Calendar to this date
      *
-     * @param date The date to select
+     * @param date      The date to select
      * @param immediate pass true to make the calendar scroll as fast as possible to reach the target date
-     * ,or false to play default scroll animation speed.
+     *                  ,or false to play default scroll animation speed.
      */
     public void selectDate(Date date, boolean immediate) {
         if (loading) {
@@ -219,6 +234,10 @@ public class HorizontalCalendar {
                 }
             });
         }
+    }
+
+    public RecyclerView.OnScrollListener getOnScrollListener() {
+        return onScrollListener;
     }
 
     public void show() {
@@ -318,6 +337,14 @@ public class HorizontalCalendar {
         this.textColorNormal = textColorNormal;
     }
 
+    public int getTextColorDay() {
+        return textColorDay;
+    }
+
+    public void setTextColorDay(int textColorDay) {
+        this.textColorDay = textColorDay;
+    }
+
     public int getTextColorSelected() {
         return textColorSelected;
     }
@@ -397,7 +424,7 @@ public class HorizontalCalendar {
         String formatDayName;
         String formatDayNumber;
         String formatMonth;
-        int textColorNormal, textColorSelected;
+        int textColorNormal, textColorSelected, textColorDay;
         int selectedDateBackground;
         int selectorColor;
         private float textSizeMonthName, textSizeDayNumber, textSizeDayName;
@@ -408,7 +435,7 @@ public class HorizontalCalendar {
 
         /**
          * @param rootView pass the rootView for the Fragment where HorizontalCalendar is attached
-         * @param viewId the id specified for HorizontalCalendarView in your layout
+         * @param viewId   the id specified for HorizontalCalendarView in your layout
          */
         public Builder(View rootView, int viewId) {
             this.rootView = rootView;
@@ -417,7 +444,7 @@ public class HorizontalCalendar {
 
         /**
          * @param activity pass the activity where HorizontalCalendar is attached
-         * @param viewId the id specified for HorizontalCalendarView in your layout
+         * @param viewId   the id specified for HorizontalCalendarView in your layout
          */
         public Builder(Activity activity, int viewId) {
             this.rootView = activity.getWindow().getDecorView();
@@ -459,9 +486,10 @@ public class HorizontalCalendar {
             return this;
         }
 
-        public Builder textColor(int textColorNormal, int textColorSelected) {
+        public Builder textColor(int textColorNormal, int textColorSelected, int textColorDay) {
             this.textColorNormal = textColorNormal;
             this.textColorSelected = textColorSelected;
+            this.textColorDay = textColorDay;
             return this;
         }
 

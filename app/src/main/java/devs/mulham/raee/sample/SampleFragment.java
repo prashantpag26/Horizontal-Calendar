@@ -3,6 +3,7 @@ package devs.mulham.raee.sample;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +39,13 @@ public class SampleFragment extends Fragment {
                 .startDate(startDate.getTime())
                 .endDate(endDate.getTime())
                 .datesNumberOnScreen(5)
-                .dayNameFormat("EEE")
+                .dayNameFormat("E")
                 .dayNumberFormat("dd")
                 .monthFormat("MMM")
                 .textSize(14f, 24f, 14f)
                 .showDayName(true)
                 .showMonthName(true)
-                .textColor(Color.LTGRAY, Color.WHITE)
+                .textColor(Color.LTGRAY, Color.WHITE, ContextCompat.getColor(getActivity(), R.color.colorCalenderDefaultText))
                 .selectedDateBackground(Color.TRANSPARENT)
                 .build();
 
